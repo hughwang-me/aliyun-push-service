@@ -43,13 +43,16 @@ public class PushService implements InitializingBean {
         msgBean.setIdentityName("身份证号码");
         msgBean.setIdentityName("王欢");
         msgBean.setSubmitId("12");
+        log.warn("发送的消息内容: {}" , JSON.toJSONString(msgBean));
 
         request.setAppKey(30256251L);
         request.setPushType("MESSAGE");
         request.setDeviceType("ALL");
         request.setTarget("DEVICE");
         request.setTargetValue("406646fd4f6343089d8e7ab1e9773fef");
-        request.setBody("测试推送消息Body —> " + random.nextLong());
+
+
+        request.setBody(JSON.toJSONString(msgBean));
         request.setTitle("测试推送消息Title —> " + random.nextLong());
 
         request.setAndroidNotifyType("BOTH");
@@ -64,13 +67,13 @@ public class PushService implements InitializingBean {
 
 
 
-        request.setAndroidExtParameters(JSON.toJSONString(msgBean));
+        request.setAndroidExtParameters(JSON.toJSONString(msgBean)); //只有发送通知时候生效
 
         request.setAndroidNotificationChannel("1");
 
         try {
             PushResponse response = client.getAcsResponse(request);
-            System.out.println(new Gson().toJson(response));
+            log.warn(new Gson().toJson(response));
         } catch (ServerException e) {
             e.printStackTrace();
         } catch (ClientException e) {
